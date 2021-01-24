@@ -19,6 +19,9 @@ from timm import create_model
 from timm.models.layers import create_conv2d, create_pool2d, Swish, get_act_layer
 from .config import get_fpn_config, set_config_writeable, set_config_readonly
 
+from pycls.models.model_zoo import effnet
+
+
 _DEBUG = False
 
 _ACT_LAYER = Swish
@@ -561,6 +564,7 @@ class EfficientDet(nn.Module):
             config.backbone_name, features_only=True, out_indices=(2, 3, 4),
             pretrained=pretrained_backbone, **config.backbone_args)
         feature_info = get_feature_info(self.backbone)
+        self.backbone = effnet(config.backbone_name.split('_')[-1].upper(), pretrained=True)
         self.fpn = BiFpn(self.config, feature_info)
         self.class_net = HeadNet(self.config, num_outputs=self.config.num_classes)
         self.box_net = HeadNet(self.config, num_outputs=4)
@@ -612,8 +616,15 @@ class EfficientDet(nn.Module):
         self.box_net.toggle_bn_level_first()
 
     def forward(self, x):
-        x = self.backbone(x)
-        x = self.fpn(x)
+        x = self.backbone.stem(x)
+        c1 = self.backbone.s1(x)
+        c2 = self.backbone.s2(c1)
+        c3 = self.backbone.s3(c2)
+        c4 = self.backbone.s4(c3)
+        c5 = self.backbone.s5(c4)
+        c6 = self.backbone.s6(c5)
+        c7 = self.backbone.s7(c6)
+        x = self.fpn([c3, c5, c7])
         x_class = self.class_net(x)
         x_box = self.box_net(x)
         return x_class, x_box
