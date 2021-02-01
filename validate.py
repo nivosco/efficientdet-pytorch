@@ -80,7 +80,7 @@ parser.add_argument('--no-prefetcher', action='store_true', default=False,
                     help='disable fast prefetcher')
 parser.add_argument('--pin-mem', action='store_true', default=False,
                     help='Pin CPU memory in DataLoader for more efficient (sometimes) transfer to GPU.')
-parser.add_argument('--use-ema', dest='use_ema', action='store_true',
+parser.add_argument('--use-ema', dest='use_ema', action='store_false',
                     help='use ema version of weights if present')
 parser.add_argument('--amp', action='store_true', default=False,
                     help='Use AMP mixed precision. Defaults to Apex, fallback to native Torch AMP.')
