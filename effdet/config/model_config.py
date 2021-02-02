@@ -133,7 +133,6 @@ efficientdet_model_param_dict = dict(
         backbone_args=dict(drop_path_rate=0.2),
         url='https://github.com/rwightman/efficientdet-pytorch/releases/download/v0.1/efficientdet_d1-bb7e98fe.pth',
     ),
-  
     efficientdet_d2=dict(
         name='efficientdet_d2',
         backbone_name='efficientnet_b2',
@@ -146,6 +145,20 @@ efficientdet_model_param_dict = dict(
         backbone_args=dict(drop_path_rate=0.2),
         url='',  # no pretrained weights yet
     ),
+    efficientdet_d2_hse=dict(
+        name='efficientdet_d2_hse',
+        hse_enable=True,
+        backbone_name='efficientnet_b2',
+        image_size=(768, 768),
+        fpn_channels=112,
+        fpn_cell_repeats=5,
+        box_class_repeats=3,
+        pad_type='',
+        redundant_bias=False,
+        backbone_args=dict(drop_path_rate=0.2),
+        url='',  # no pretrained weights yet
+    ),
+ 
     efficientdet_d3=dict(
         name='efficientdet_d3',
         backbone_name='efficientnet_b3',
